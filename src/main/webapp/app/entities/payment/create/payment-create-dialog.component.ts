@@ -20,18 +20,15 @@ export class PaymentCreateDialogComponent {
   pay: any;
   length: any;
   time: number;
+  datavalue: any;
   data: any;
-  display: any = 'https://payment/.';
   interval: any;
   form: any;
   ihostedPayment: any;
   token: any;
   ppUrl: any;
   ppToken: any;
-  fullPaypalUrl: any;
-
   doc: any;
-  parser: any;
 
   constructor(
     protected paymentService: PaymentService,
@@ -122,7 +119,6 @@ export class PaymentCreateDialogComponent {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
       next: (res: any) => {
         this.onSaveSuccess();
-
         this.token = JSON.stringify(res);
         this.ppUrl = JSON.parse(this.token);
         window.location.href = this.ppUrl.body;

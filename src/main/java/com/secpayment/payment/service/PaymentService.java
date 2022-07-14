@@ -17,7 +17,13 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import org.slf4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -60,61 +66,6 @@ public class PaymentService {
         return paymentRepository.save(payment);
     }
 
-    // public CreateHostedCheckoutResponse pay(Payment payment) throws URISyntaxException, IOException {
-    //     try (Client client = getClient()) {
-    //         HostedCheckoutSpecificInput hostedCheckoutSpecificInput = new HostedCheckoutSpecificInput();
-
-    //         hostedCheckoutSpecificInput.setLocale("en_GB");
-    //         hostedCheckoutSpecificInput.setVariant("100");
-    //         //hostedCheckoutSpecificInput.setReturnUrl(this.returnUrl);
-    //         hostedCheckoutSpecificInput.setReturnUrl("http://localhost:8080/payment/list");
-    //         hostedCheckoutSpecificInput.setShowResultPage(false);
-
-    //         AmountOfMoney amountOfMoney = new AmountOfMoney();
-    //         amountOfMoney.setAmount(payment.getPaymentAmout());
-    //         //amountOfMoney.setAmount(100l);
-    //         //amountOfMoney.setAmount((long) paymentAmout.getPaymentAmout().intValue());
-    //         amountOfMoney.setCurrencyCode("USD");
-
-    //         Address billingAddress = new Address();
-    //         billingAddress.setCountryCode("US");
-
-    //         Customer customer = new Customer();
-    //         customer.setBillingAddress(billingAddress);
-    //         customer.setMerchantCustomerId("1234");
-
-    //         Order order = new Order();
-    //         order.setAmountOfMoney(amountOfMoney);
-    //         order.setCustomer(customer);
-
-    //         CreateHostedCheckoutRequest body = new CreateHostedCheckoutRequest();
-    //         body.setHostedCheckoutSpecificInput(hostedCheckoutSpecificInput);
-    //         body.setOrder(order);
-
-    //         CreateHostedCheckoutResponse response = client.merchant("1204").hostedcheckouts().create(body);
-    //         log.info("Worldline partial redirect url : {}", response.getPartialRedirectUrl());
-
-    //         //Console.log(response.getPartialRedirectUrl());
-
-    //         return response;
-    //     }
-
-    // }
-
-    // @Value("${spring.application.apiKeyId}")
-    //  String apiKeyId;
-
-    //  @Value("${spring.application.secretApiKey}")
-    //  String secretApiKey;
-    // private com.ingenico.connect.gateway.sdk.java.Client getClient() throws URISyntaxException {
-    //     String apiKey = System.getProperty("apiKeyId", this.apiKeyId);
-    //     String secretApi = System.getProperty("secretApiKey", this.secretApiKey);
-
-    //     URL propertiesUrl = getClass().getResource("/hostedpaymentpage.properties");
-    //     assert propertiesUrl != null;
-    //     CommunicatorConfiguration configuration = Factory.createConfiguration(propertiesUrl.toURI(), apiKey, secretApi);
-    //     return Factory.createClient(configuration);
-    // }
     /**
      * Partially update a payment.
      *
@@ -182,5 +133,41 @@ public class PaymentService {
     public void delete(Long id) {
         log.debug("Request to delete Payment : {}", id);
         paymentRepository.deleteById(id);
+    }
+
+    public void sendMail(String recipientGmail, String paymentStatus, String name) {
+        String to = recipientGmail;
+        String from = "henokaddis72@gmail.com";
+        String host = "smtp.gmail.com";
+
+        Properties properties = System.getProperties();
+
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", "465");
+        properties.put("mail.smtp.ssl.enable", "true");
+        properties.put("mail.smtp.auth", "true");
+
+        Session session = Session.getInstance(
+            properties,
+            new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication("henokaddis72@gmail.com", "henok@WSB");
+                }
+            }
+        );
+
+        session.setDebug(true);
+        try {
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(from));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+            message.setSubject("PayGov payment status notification");
+            message.setText("Hi Mr/Mrs " + "'" + name + "'" + " your previous payment appeal is " + "'" + paymentStatus + "'");
+
+            Transport.send(message);
+        } catch (MessagingException mex) {
+            mex.printStackTrace();
+        }
     }
 }

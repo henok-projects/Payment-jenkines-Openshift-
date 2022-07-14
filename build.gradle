@@ -345,7 +345,17 @@ jaxb "com.sun.xml.bind:jaxb-xjc:2.1.7"
         exclude module: "spring-boot-starter-tomcat"
     }
     implementation "org.springframework.boot:spring-boot-starter-undertow"
-    //
+    // kafka plugins
+    implementation 'org.springframework.kafka:spring-kafka'
+    implementation 'org.apache.kafka:kafka-clients:3.1.0'
+    implementation 'org.apache.kafka:kafka-streams:3.1.0'
+    //email
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    //droople
+    implementation 'org.drools:drools-decisiontables:7.66.0.Final'
+    implementation 'org.drools:drools-core:7.66.0.Final'
+    implementation 'org.drools:drools-compiler:7.66.0.Final'
+
     implementation 'com.ingenico.connect.gateway:connect-sdk-java:6.30.0'
     implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
     implementation "org.zalando:problem-spring-web"

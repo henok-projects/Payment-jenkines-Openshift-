@@ -1,0 +1,9 @@
+{
+  "changelogDate": "20220702195959",
+  "fields": [],
+  "name": "Kafkadmin",
+  "pagination": "infinite-scroll",
+  "readOnly": true,
+  "relationships": [],
+  "skipServer": true
+}

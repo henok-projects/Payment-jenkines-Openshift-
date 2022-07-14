@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IPayment } from '../payment.model';
 import { PaymentService } from '../service/payment.service';
 import { PaymentCreateDialogComponent } from '../create/payment-create-dialog.component';
+import { finalize, Observable } from 'rxjs';
 
 @Component({
   selector: 'jhi-payment',
@@ -18,6 +19,12 @@ export class PaymentComponent implements OnInit {
   payment: any;
   paymentAmount: any;
   constructor(protected paymentService: PaymentService, protected modalService: NgbModal) {}
+  ngOnInit(): void {
+    this.pay = sessionStorage.getItem('payment');
+    this.payment = JSON.parse(this.pay);
+    this.loadAll();
+    this.subscribeToSaveResponse(this.paymentService.getSendemail(this.payment));
+  }
 
   // loadAll(): void {
   //   this.isLoading = true;
@@ -54,13 +61,12 @@ export class PaymentComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this.loadAll();
-  }
-
   trackId(_index: number, item: IPayment): number {
     return item.id!;
   }
+  // send(): void {
+  //   this.subscribeToSaveResponse(this.paymentService.getSendemail());
+  // }
 
   delete(payment: IPayment): void {
     const modalRef = this.modalService.open(PaymentCreateDialogComponent, { size: 'lg', backdrop: 'static' });
@@ -70,6 +76,24 @@ export class PaymentComponent implements OnInit {
       if (reason === 'deleted') {
         this.loadAll();
       }
+    });
+  }
+  onSaveFinalize(): void {
+    throw new Error('Method not implemented.');
+  }
+  onSaveSuccess(): void {
+    throw new Error('Method not implemented.');
+  }
+  onSaveError(): void {
+    throw new Error('Method not implemented.');
+  }
+
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<any>>): void {
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: (res: any) => {
+        this.onSaveSuccess();
+      },
+      error: () => this.onSaveError(),
     });
   }
 }

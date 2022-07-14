@@ -6,10 +6,11 @@ import { PaymentUpdateComponent } from './update/payment-update.component';
 import { PaymentRoutingModule } from './route/payment-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PaymentCreateDialogComponent } from './create/payment-create-dialog.component';
+import { KafkadminComponent } from './kafkadmin/kafkadmin.component';
 
 @NgModule({
   imports: [SharedModule, PaymentRoutingModule, FormsModule, ReactiveFormsModule],
-  declarations: [PaymentComponent, PaymentDetailComponent, PaymentUpdateComponent, PaymentCreateDialogComponent],
+  declarations: [PaymentComponent, PaymentDetailComponent, PaymentUpdateComponent, PaymentCreateDialogComponent, KafkadminComponent],
   entryComponents: [PaymentCreateDialogComponent],
 })
 export class PaymentModule {}

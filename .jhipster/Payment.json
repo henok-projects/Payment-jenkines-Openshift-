@@ -38,5 +38,6 @@
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "service": "serviceClass"
+  "service": "serviceClass",
+  "skipServer": true
 }

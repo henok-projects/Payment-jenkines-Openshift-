@@ -13,6 +13,7 @@ import com.ingenico.connect.gateway.sdk.java.domain.payment.definitions.Order;
 import com.paypal.exception.*;
 import com.paypal.sdk.exceptions.PayPalException;
 import com.secpayment.payment.domain.Payment;
+import com.secpayment.payment.kafka.Storage;
 import com.secpayment.payment.repository.PaymentRepository;
 import com.secpayment.payment.service.PaymentService;
 import com.secpayment.payment.util.Configuration;
@@ -25,11 +26,12 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import javax.validation.Valid;
+// import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -64,6 +66,9 @@ public class PaymentResource {
 
     private final PaymentRepository paymentRepository;
 
+    @Autowired
+    private Storage messageStorage;
+
     public PaymentResource(PaymentService paymentService, PaymentRepository paymentRepository) {
         this.paymentService = paymentService;
         this.paymentRepository = paymentRepository;
@@ -84,10 +89,9 @@ public class PaymentResource {
             throw new BadRequestAlertException("A new pay cannot already have an ID", ENTITY_NAME, "idexists");
         }
 
-        Payment result = paymentRepository.save(payment);
-        SendMail mail = new SendMail();
-        mail.sendMail(payment.getEmail(), payment.getName());
+        messageStorage.update(payment);
 
+        Payment result = paymentRepository.save(payment);
         return ResponseEntity
             .created(new URI("/api/payment/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -162,7 +166,7 @@ public class PaymentResource {
     @PostMapping("/paypal")
     public String setExpressCheckout(@RequestBody Payment payment)
         throws PayPalException, ClientActionRequiredException, SSLConfigurationException, MissingCredentialException, InvalidResponseDataException, InvalidCredentialException, IOException, HttpErrorException, InterruptedException, SAXException, ParserConfigurationException {
-        paymentRepository.save(payment);
+        // paymentRepository.save(payment);
 
         Long payerId = 5L;
         String paymentAmount = payment.getPaymentAmout();
@@ -379,6 +383,15 @@ public class PaymentResource {
         String result = restTemplate.getForObject(uri, String.class);
         return result;
     }
+
+    /**
+     * @return
+     */
+
+    // @RequestMapping(value = "/sendemail")
+    // public String sendEmail() {
+    //    return "Email sent successfully";
+    // }
 
     /**
      * {@code GET  /payments/:id} : get the "id" payment.

@@ -55,6 +55,7 @@ export class PaymentDetailComponent implements OnInit {
   }
 
   save(): void {
+    this.subscribeToSaveResponse(this.paymentService.kafkaQueue(this.payment));
     this.isSaving = true;
     const modalRef = this.modalService.open(PaymentCreateDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.payment = this.payment;

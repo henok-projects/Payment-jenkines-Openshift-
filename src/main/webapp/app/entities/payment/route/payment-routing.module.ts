@@ -7,6 +7,7 @@ import { PaymentDetailComponent } from '../detail/payment-detail.component';
 import { PaymentUpdateComponent } from '../update/payment-update.component';
 import { PaymentRoutingResolveService } from './payment-routing-resolve.service';
 import { PaymentCreateDialogComponent } from '../create/payment-create-dialog.component';
+import { KafkadminComponent } from '../kafkadmin/kafkadmin.component';
 
 const paymentRoute: Routes = [
   {
@@ -14,6 +15,22 @@ const paymentRoute: Routes = [
     component: PaymentComponent,
     // canActivate: [UserRouteAccessService],
   },
+
+  {
+    path: 'kafka',
+    component: KafkadminComponent,
+    // canActivate: [UserRouteAccessService],
+  },
+
+  // {
+  //   path: 'kafka',
+  //   component: KafkadminComponent,
+  //   resolve: {
+  //     payment: PaymentRoutingResolveService,
+  //   },
+  //   // canActivate: [UserRouteAccessService],
+  // },
+
   {
     path: 'view',
     component: PaymentDetailComponent,

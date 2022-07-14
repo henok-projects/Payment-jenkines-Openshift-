@@ -6,6 +6,7 @@ export interface IPayment {
   name?: string | null;
   email?: string | null;
   phone?: number | null;
+  approvalStatus?: string | null;
 }
 
 export class Payment implements IPayment {
@@ -16,7 +17,8 @@ export class Payment implements IPayment {
     public paymentAmout?: string | null,
     public name?: string | null,
     public email?: string | null,
-    public phone?: number | null
+    public phone?: number | null,
+    public approvalStatus?: string | null
   ) {}
 }
 

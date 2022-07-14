@@ -31,7 +31,7 @@ export class PaymentUpdateComponent implements OnInit {
     ccc: [null, [Validators.required, Validators.pattern('((?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[$@#]).{8,30})')]],
     paymentAmout: [null, [Validators.required]],
     name: [null, [Validators.required]],
-    email: [null, [Validators.required, Validators.email]],
+    email: [null, [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{3,4}$')]],
     phone: [null, [Validators.required]],
   });
 
