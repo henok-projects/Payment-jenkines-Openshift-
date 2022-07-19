@@ -36,8 +36,8 @@ class PaymentResourceIT {
     private static final String DEFAULT_CCC = "AAAAAAAAAA";
     private static final String UPDATED_CCC = "BBBBBBBBBB";
 
-    private static final Integer DEFAULT_PAYMENT_AMOUT = 1;
-    private static final Integer UPDATED_PAYMENT_AMOUT = 2;
+    private static final String DEFAULT_PAYMENT_AMOUT = "BBB";
+    private static final String UPDATED_PAYMENT_AMOUT = "AA";
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
