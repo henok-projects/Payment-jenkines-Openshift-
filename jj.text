@@ -1,0 +1,35 @@
+pipeline{
+    agent any
+
+    tools {
+        gradle "gradle"
+        jdk "java"
+    }
+    
+    environment{
+        dockerhub = credentials("dockerhub)
+    }
+
+    stage('build image') {
+        when {
+            branch 'master'
+        }
+
+        steps { 
+            sh 'docker build -t payment/src/main/docker/app.yml'
+              }
+    }
+
+    stage('push to dockerhub'){
+         when {
+            branch 'master'
+        }
+
+        steps { 
+            sh 'docker build -t payment/src/main/docker/app.yml'
+            sh 'docker build -t payment/src/main/docker/app.yml'
+            sh 'docker build -t payment/src/main/docker/app.yml'
+              }
+    }
+
+}
